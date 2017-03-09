@@ -63,3 +63,23 @@ export class AppComponent {
     </p>
   </form>
 </div>
+
+5、添加多个条件
+
+1. 组件配置
+constructor() {
+    // 初始化表达组里面的内容
+    this.form = new FormGroup({
+      username: new FormControl('', CustomValidators.range([5, 9])),
+      max: new FormControl('', CustomValidators.max(100)),
+      min: new FormControl('', CustomValidators.min(0)),
+      num: new FormControl('', CustomValidators.number),
+      phone: new FormControl('', CustomValidators.phone('zh-CN'))
+    });
+  }
+2. 模块配置
+<div>
+      <input type="text" [(ngModel)]="form.num" name="num" #num="ngModel" #max="ngModel" #min="ngModel" number class="form-control" required
+             placeholder="年龄" [max]="100" [min]="0"/>
+      <p class="text-danger" *ngIf="num.errors?.number || max.errors?.max || min.errors?.min">只能输入0-100数字</p>
+</div>
