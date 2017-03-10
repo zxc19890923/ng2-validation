@@ -83,3 +83,74 @@ constructor() {
              placeholder="年龄" [max]="100" [min]="0"/>
       <p class="text-danger" *ngIf="num.errors?.number || max.errors?.max || min.errors?.min">只能输入0-100数字</p>
 </div>
+
+
+
+3、注册表单实例
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <form #register="ngForm">
+        <p>
+          <input type="text" [(ngModel)]="register.username" name="username" #username="ngModel" [rangeLength]="[4, 20]"
+                 class="form-control" required placeholder="用户名"/>
+        </p>
+        <p class="text-danger" *ngIf="username.errors?.rangeLength">输入字符长度在4-20之间</p>
+
+        <p>
+          <input type="password" [(ngModel)]="register.password" name="password" #password="ngModel"
+                 [rangeLength]="[6, 18]"
+                 class="form-control" required placeholder="密码"/>
+        </p>
+        <p class="text-danger" *ngIf="password.errors?.rangeLength">
+          密码在6-18位之间
+        </p>
+        <p>
+          <input type="password" [(ngModel)]="register.secondPassword" name="secondPassword" #secondPassword="ngModel"
+                 class="form-control" required placeholder="再次输入密码" [equalTo]="password"
+          />
+        </p>
+        <p class="text-danger" *ngIf="secondPassword.errors?.equalTo">两次输入密码不一致</p>
+
+
+        <p>
+          <button class="btn btn-primary" [disabled]="!register.form.valid">提交</button>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+import {Component} from "@angular/core";
+import {FormGroup, FormControl, Validator} from "@angular/forms";
+import {CustomValidators} from "ng2-validation";
+
+@Component({
+  selector: "app-register",
+  templateUrl: "register.component.html"
+})
+export class RegisterComponent {
+  // 这里定义了register对象, 所以可以使用register里面的元素配置ngModel
+  register:FormGroup;
+
+  constructor() {
+    let username = new FormControl('', CustomValidators.range([4, 20]));
+    let password = new FormControl('', CustomValidators.range([6, 16]));
+    let secondPassword = new FormControl('', CustomValidators.equalTo(password));
+    let email = new FormControl('', CustomValidators.email);
+    let phone = new FormControl('', CustomValidators.phone('zh-CN'));
+    let position = new FormControl('', CustomValidators.range([4, 20]));
+    let address = new FormControl('', CustomValidators.range([0, 200]));
+
+    this.register = new FormGroup({
+      username: username,
+      password: password,
+      secondPassword: secondPassword,
+      email: email,
+      phone: phone,
+      position: position,
+      address: address
+    })
+  }
+}
+
