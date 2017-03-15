@@ -1,3 +1,8 @@
+注意：
+
+验证是在组件重定义的变量，然后通过界面中的 #username="ngModel"这个样式来验证的，和[(ngModel)]="username"无关
+提交按钮可以设置如果验证不通过，就处于只读状态<button [disabled]="!myform.form.valid">提交</button>
+
 1、安装模块
 
 npm install ng2-validation --save
